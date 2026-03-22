@@ -115,15 +115,9 @@
         
         /* 横屏模式类 */
         .landscape-mode {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vh;
-            height: 100vw;
-            transform: rotate(90deg) translateY(-100%);
-            transform-origin: top left;
-            z-index: 1000;
+            position: relative;
             overflow-x: auto;
+            overflow-y: auto;
             background: white;
             padding: 20px;
             box-shadow: 0 0 20px rgba(0,0,0,0.2);
@@ -131,6 +125,8 @@
         
         .landscape-mode table {
             font-size: 10px;
+            width: auto;
+            min-width: 100%;
         }
         
         .landscape-mode th, .landscape-mode td {
@@ -819,8 +815,8 @@
             const button = document.getElementById('orientationToggle');
             if (scheduleContainer.classList.contains('landscape-mode')) {
                 button.textContent = '🔄 竖屏显示';
-                // 提示用户旋转设备
-                alert('请将设备旋转至横屏以获得最佳查看效果');
+                // 提示用户可以旋转设备并使用浏览器缩放功能
+                alert('请将设备旋转至横屏以获得最佳查看效果，您可以使用浏览器的缩放功能调整页面大小');
             } else {
                 button.textContent = '🔄 横屏显示';
             }
