@@ -1775,7 +1775,9 @@
                     rowStyle = 'background: #FFFF00;';
                 }
                 
-                const actualRestDays = employeeSchedule[name].selectedDays.length + employeeSchedule[name].autoRestDays.length;
+                // 确保employeeSchedule中存在该员工的数据
+                const empSchedule = employeeSchedule[name] || { selectedDays: [], autoRestDays: [] };
+                const actualRestDays = empSchedule.selectedDays.length + empSchedule.autoRestDays.length;
                 html += `
                     <tr style="${rowStyle}">
                         <td>${index + 1}</td>
@@ -1798,11 +1800,11 @@
                         cellClass = 'on-duty';
                         cellText = '上&值';
                         cellType = 'on-duty';
-                    } else if (employeeSchedule[name].selectedDays.includes(dateStr)) {
+                    } else if (empSchedule.selectedDays.includes(dateStr)) {
                         cellClass = 'assigned';
                         cellText = '指定休';
                         cellType = 'assigned';
-                    } else if (employeeSchedule[name].autoRestDays.includes(dateStr)) {
+                    } else if (empSchedule.autoRestDays.includes(dateStr)) {
                         cellClass = 'rest';
                         cellText = '休息';
                         cellType = 'rest';
