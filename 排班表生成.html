@@ -7,69 +7,159 @@
     <style>
         * {
             margin: 0;
-            
-            盒模型：边框盒;
+            padding: 0;
+            box-sizing: border-box;
         }
-        身体 {
-            字体："微软 YaHei"，Arial，无衬线;
-            背景: #f5f5f5;
-            最小高度：100vh;
-            
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .容器 {
-            最大宽度：100%;
-            边距：0 自动;
-             
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
         }
-        @media (最小宽度: 768像素) {
-            .容器 {
-                最大宽度：600像素;
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
             }
         }
-        .返回按钮 {
-            显示：行内块级元素;
-             
-            背景: #667eea;
-            颜色：白色;
-            文本装饰：无;
-            边框半径：6像素;
-            下边距：12像素;
+        
+        /* 移动端响应式设计 */
+        @media (max-width: 767px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .control-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .control-item {
+                height: auto;
+                justify-content: center;
+            }
+            
+            .btn-group {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .schedule-container {
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+            
+            table {
+                font-size: 10px;
+            }
+            
+            th, td {
+                padding: 4px 6px;
+                min-width: 30px;
+                height: 28px;
+            }
+            
+            .col-small {
+                width: 40px;
+            }
+            
+            .col-name {
+                width: 70px;
+            }
+            
+            .col-group {
+                width: 50px;
+            }
+            
+            .col-days {
+                width: 45px;
+            }
+            
+            .print-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+        
+        /* 横屏模式优化 */
+        @media (orientation: landscape) and (max-width: 1023px) {
+            .schedule-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                font-size: 9px;
+            }
+            
+            th, td {
+                padding: 3px 4px;
+                min-width: 25px;
+                height: 24px;
+            }
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 15px;
             font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #5a6fd8;
         }
         h1 {
             text-align: center;
             color: #333;
-            font-size: 22px;
-            margin-bottom: 15px;
+            font-size: 18px;
+            margin-bottom: 12px;
         }
         .controls {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .control-row {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
             justify-content: center;
         }
         .control-item {
             display: flex;
             align-items: center;
-            height: 40px;
+            height: 45px;
         }
         .rest-days-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
         }
         .month-selector {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -81,12 +171,14 @@
         select {
             padding: 8px 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: all 0.3s ease;
         }
         select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .btn-group {
             display: flex;
@@ -94,77 +186,153 @@
             margin-left: auto;
         }
         .btn {
-            padding: 8px 15px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 6px;
-            font-size: 13px;
+            border-radius: 8px;
+            font-size: 12px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn:disabled {
+            background: #cccccc !important;
+            color: #666666 !important;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4092 100%);
+        }
         .btn-success {
             background: #4CAF50;
             color: white;
+        }
+        .btn-success:hover {
+            background: #45a049;
         }
         .btn-warning {
             background: #ff9800;
             color: white;
         }
+        .btn-warning:hover {
+            background: #f57c00;
+        }
         .btn-info {
             background: #2196F3;
             color: white;
         }
+        .btn-info:hover {
+            background: #1976D2;
+        }
         .editable-cell {
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             position: relative;
+            border-radius: 4px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         .editable-cell::after {
             content: '▼';
             position: absolute;
-            right: 2px;
-            bottom: 0;
-            font-size: 8px;
-            color: #FF0000;
+            right: 4px;
+            bottom: 2px;
+            font-size: 10px;
+            color: #666;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: all 0.3s ease;
         }
         .editable-cell:hover::after,
-        .editable-cell.active::after {
+        .editable-cell.active::after,
+        .editable-cell:active::after {
             opacity: 1;
+            transform: translateY(1px);
         }
         .editable-cell:hover {
+            filter: brightness(0.95);
+            box-shadow: inset 0 0 0 2px rgba(102, 126, 234, 0.3);
+        }
+        .editable-cell:active {
             filter: brightness(0.9);
+        }
+        .editable-cell.active {
+            box-shadow: inset 0 0 0 2px #667eea;
+        }
+        
+        /* 移动端触摸优化 */
+        @media (max-width: 767px) {
+            .editable-cell {
+                min-height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .dropdown-menu {
+                min-width: 180px;
+                gap: 6px;
+                padding: 10px;
+            }
+            
+            .dropdown-item {
+                padding: 10px 14px;
+                font-size: 14px;
+            }
         }
         .dropdown-menu {
             position: fixed;
             background: white;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
             z-index: 1000;
             display: none;
-            display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-            padding: 4px;
+            gap: 4px;
+            padding: 8px;
+            min-width: 160px;
         }
         .dropdown-menu.show {
             display: grid;
+            animation: dropdownFadeIn 0.2s ease;
+        }
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .dropdown-item {
-            padding: 3px 4px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 9px;
-            transition: background 0.2s;
+            font-size: 12px;
+            transition: all 0.3s ease;
             text-align: center;
-            border-radius: 2px;
+            border-radius: 6px;
         }
         .dropdown-item:hover {
             background: #f5f5f5;
+            transform: translateX(2px);
         }
         .dropdown-item.work {
             background-color: white;
@@ -203,21 +371,21 @@
             background: #fff3e0;
             border: 1px solid #ff9800;
             border-radius: 6px;
-            padding: 8px 12px;
+            padding: 6px 10px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
             flex-wrap: wrap;
-            height: 40px;
+            height: 36px;
         }
         .rest-days-info label {
             font-weight: bold;
             color: #e65100;
             margin: 0;
-            font-size: 13px;
+            font-size: 11px;
         }
         .rest-days-value {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
             color: #f57c00;
         }
@@ -230,58 +398,93 @@
         }
         .schedule-container {
             background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             overflow-x: auto;
             position: relative;
+            margin-bottom: 30px;
         }
+        /* 移除所有冻结效果，恢复正常显示 */
         .fixed-table {
             position: relative;
         }
-        .fixed-table th:nth-child(1),
-        .fixed-table td:nth-child(1) {
-            position: sticky;
-            left: 0;
-            background: white;
-            z-index: 10;
-            border-right: 2px solid #000;
+        
+        .fixed-table th,
+        .fixed-table td {
+            position: static;
+            z-index: auto;
+            box-shadow: none;
         }
-        .fixed-table th:nth-child(2),
-        .fixed-table td:nth-child(2) {
-            position: sticky;
-            left: 45px;
-            background: white;
-            z-index: 9;
-            border-right: 2px solid #000;
+        
+        /* 确保颜色色块正常显示 */
+        .rest {
+            background-color: #FFFF00;
         }
-        .fixed-table thead th:nth-child(1),
-        .fixed-table thead th:nth-child(2) {
-            z-index: 15;
-            background: white;
+        .on-duty {
+            background-color: #FF0000;
+            color: white;
+        }
+        .vacation {
+            background-color: #00FF00;
+        }
+        .assigned {
+            background-color: #800080;
+            color: white;
+        }
+        .productive {
+            background-color: #87CEEB;
+        }
+        .sunday {
+            background-color: #FF0000;
+            color: white;
+            font-weight: bold;
+        }
+        .marriage {
+            background-color: #FF99FF;
+        }
+        .qc {
+            background-color: #FFCC99;
+        }
+        .retirement {
+            background-color: #CCCCCC;
+        }
+        .annual {
+            background-color: #66CCFF;
+        }
+        .compensatory {
+            background-color: #999999;
+            color: white;
+        }
+        .maternity {
+            background-color: #ADD8E6;
         }
         .schedule-title {
             text-align: center;
-            font-size: 24px;
+            font-size: 14px;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
         table {
             border-collapse: collapse;
             width: 100%;
-            font-size: 11px;
+            font-size: 10px;
+            border: 2px solid #000;
         }
         th, td {
             border: 1px solid #000;
-            padding: 3px 2px;
+            padding: 4px 6px;
             text-align: center;
             vertical-align: middle;
             min-width: 35px;
             height: 28px;
             white-space: nowrap;
+            transition: all 0.2s ease;
         }
         th {
             font-weight: bold;
+            background: #f8f9fa;
         }
         td {
             background-color: white;
@@ -290,16 +493,16 @@
             font-weight: bold;
         }
         .col-small {
-            width: 45px;
+            width: 50px;
         }
         .col-name {
-            width: 70px;
+            width: 80px;
         }
         .col-group {
-            width: 55px;
+            width: 60px;
         }
         .col-days {
-            width: 45px;
+            width: 55px;
         }
         .rest {
             background-color: #FFFF00;
@@ -357,17 +560,26 @@
         }
         .print-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: #4CAF50;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             color: white;
             border: none;
-            border-radius: 30px;
-            font-size: 14px;
+            border-radius: 35px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
+        .print-btn:active {
+            transform: translateY(0);
         }
         @media print {
             .controls, .back-btn, .print-btn {
@@ -386,7 +598,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-btn">← 返回首页</a>
+        <a href="index.html" class="back-btn" onclick="return confirmBackHome()">← 返回首页</a>
         
         <h1>📋 排班表生成</h1>
         
@@ -410,9 +622,10 @@
                 </div>
                 <div class="control-item">
                     <div class="btn-group">
-                        <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
-                        <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
-                    </div>
+                    <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
+                    <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
+                    <button class="btn btn-success" onclick="confirmSchedule()">✅ 确定排班</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -428,6 +641,7 @@
     <button class="print-btn" onclick="window.print()">🖨️ 打印排班表</button>
 
     <script>
+        // 员工列表和分组信息
         let employeeList = [
             '谢焕君', '陈文童', '付新远', '林创武', '李亚景', '迟喻阳', '蒋能', '林镇兴',
             '林佗贵', '吴兴义', '吴兴浪', '刘少东', '李仁', '陈安然', '黄丽情', '崔斯欣'
@@ -522,12 +736,7 @@
             currentYear = now.getFullYear();
             currentMonth = now.getMonth() + 1;
             
-            if (currentMonth === 12) {
-                currentMonth = 1;
-                currentYear++;
-            } else {
-                currentMonth++;
-            }
+            // 不再自动增加月份，默认显示当前月份
             
             populateYearSelect();
             populateMonthSelect();
@@ -536,10 +745,21 @@
             
             loadTotalRestDays();
             
+            // 更新生成按钮状态
+            updateGenerateButtonStatus();
+            
             const key = getScheduleKey();
             const savedData = localStorage.getItem(key);
             if (savedData) {
                 loadSchedule();
+            } else {
+                // 显示提示信息，告知用户可以选择月份查看历史记录
+                document.getElementById('scheduleContainer').innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: #999;">
+                        <p style="font-size: 18px; margin-bottom: 10px;">请选择月份查看排班记录</p>
+                        <p>系统会自动加载对应月份的排班数据</p>
+                    </div>
+                `;
             }
             console.log('页面初始化完成！');
         }
@@ -559,6 +779,76 @@
             document.getElementById('totalRestDaysDisplay').textContent = totalRestDays;
         }
         
+        function isPastMonth() {
+            const now = new Date();
+            const lastDayOfMonth = new Date(currentYear, currentMonth, 0);
+            return lastDayOfMonth < now;
+        }
+        
+        function canEditSchedule() {
+            // 检查是否为过去的月份
+            const pastMonth = isPastMonth();
+            if (pastMonth) {
+                return false;
+            }
+            
+            const now = new Date();
+            const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            // 计算目标月份的上个月的25号和最后一天
+            const targetMonth = currentMonth;
+            const targetYear = currentYear;
+            const lastDayOfPreviousMonth = new Date(targetYear, targetMonth - 1, 0);
+            const cutoffDate = new Date(targetYear, targetMonth - 1, 25);
+            
+            // 如果当前月份就是目标月份，不能编辑
+            if (now.getFullYear() === targetYear && now.getMonth() + 1 === targetMonth) {
+                return false;
+            }
+            
+            // 如果当前日期在目标月份的上个月的25号之前，可以编辑（收集指定休息时间）
+            // 如果当前日期在目标月份的上个月的26号到最后一天之间，可以编辑（排班确定时间）
+            if (currentDate <= lastDayOfPreviousMonth) {
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function updateGenerateButtonStatus() {
+            const generateButton = document.querySelector('.btn-primary');
+            if (!generateButton) return;
+            
+            // 检查是否为过去的月份
+            const pastMonth = isPastMonth();
+            
+            // 检查是否有确认过的排班记录
+            const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
+            const hasConfirmedSchedule = localStorage.getItem(finalKey) !== null;
+            
+            // 检查是否在排班确定时间内
+            const now = new Date();
+            const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const targetMonth = currentMonth;
+            const targetYear = currentYear;
+            const lastDayOfPreviousMonth = new Date(targetYear, targetMonth - 1, 0);
+            
+            // 如果是过去的月份，禁用生成按钮
+            if (pastMonth) {
+                generateButton.disabled = true;
+            } 
+            // 如果当前日期在目标月份的上个月的最后一天之前，即使已经确认排班，也可以生成
+            else if (currentDate <= lastDayOfPreviousMonth) {
+                generateButton.disabled = false;
+            }
+            // 如果已经确认排班，禁用生成按钮
+            else if (hasConfirmedSchedule) {
+                generateButton.disabled = true;
+            } else {
+                generateButton.disabled = false;
+            }
+        }
+        
         function onMonthChange() {
             currentYear = parseInt(document.getElementById('yearSelect').value);
             currentMonth = parseInt(document.getElementById('monthSelect').value);
@@ -566,24 +856,52 @@
             currentSchedule = null;
             scheduleLoaded = false;
             
+            // 更新生成按钮状态
+            updateGenerateButtonStatus();
+            
             document.getElementById('scheduleContainer').innerHTML = `
                 <div style="text-align: center; padding: 60px; color: #999;">
-                    <p style="font-size: 18px; margin-bottom: 10px;">请点击"一键生成排班表"按钮</p>
-                    <p>系统将根据员工提交的指定休数据自动生成排班表</p>
+                    <p style="font-size: 18px; margin-bottom: 10px;">加载中...</p>
+                    <p>正在读取${currentYear}年${currentMonth}月份的排班记录</p>
                 </div>
             `;
             
             const key = getScheduleKey();
             const savedData = localStorage.getItem(key);
             if (savedData) {
-                loadSchedule();
+                // 检查是否为过去的月份
+                const pastMonth = isPastMonth();
+                // 检查是否有确认过的排班记录
+                const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
+                const hasConfirmedSchedule = localStorage.getItem(finalKey) !== null;
+                
+                currentSchedule = JSON.parse(savedData);
+                scheduleLoaded = true;
+                renderEditableSchedule(pastMonth || hasConfirmedSchedule);
+            } else {
+                // 检查是否有确认过的排班记录
+                const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
+                const finalData = localStorage.getItem(finalKey);
+                if (finalData) {
+                    currentSchedule = JSON.parse(finalData);
+                    scheduleLoaded = true;
+                    renderEditableSchedule(true); // 传递参数表示已确认的排班
+                } else {
+                    document.getElementById('scheduleContainer').innerHTML = `
+                        <div style="text-align: center; padding: 60px; color: #999;">
+                            <p style="font-size: 18px; margin-bottom: 10px;">该月份暂无排班记录</p>
+                            <p>请点击"一键生成排班表"按钮创建新的排班表</p>
+                        </div>
+                    `;
+                }
             }
         }
         
         function populateYearSelect() {
             const yearSelect = document.getElementById('yearSelect');
             const now = new Date();
-            for (let i = now.getFullYear(); i <= now.getFullYear() + 1; i++) {
+            // 允许选择过去2年和未来5年的年份
+            for (let i = now.getFullYear() - 2; i <= now.getFullYear() + 5; i++) {
                 const option = document.createElement('option');
                 option.value = i;
                 option.textContent = i + '年';
@@ -617,6 +935,17 @@
         
         function generateSchedule() {
             console.log('开始生成排班表...');
+            
+            // 检查是否为过去的月份
+            const now = new Date();
+            const selectedDate = new Date(currentYear, currentMonth - 1, 1);
+            const lastDayOfMonth = new Date(currentYear, currentMonth, 0);
+            
+            if (lastDayOfMonth < now) {
+                alert('该月份已经过去，不能生成新的排班表，请查看历史记录！');
+                return;
+            }
+            
             const key = getScheduleKey();
             const savedData = localStorage.getItem(key);
             if (savedData) {
@@ -630,9 +959,9 @@
             
             const femaleEmployees = ['陈安然', '黄丽情', '崔斯欣'];
             
+            // 初始化员工排班数据
             let employeeSchedule = {};
             let restDaysPerEmployee = {};
-            let employeeRestHistory = {};
             
             employeeList.forEach(name => {
                 const empKey = 'schedule_' + currentYear + '_' + currentMonth + '_' + name;
@@ -646,6 +975,7 @@
                 
                 let autoRestDays = [];
                 
+                // 特殊处理谢焕君的休息安排（优先安排周日）
                 if (name === '谢焕君') {
                     const sundayRestDays = [];
                     for (let day = 1; day <= daysInMonth; day++) {
@@ -673,23 +1003,25 @@
                     autoRestDays: autoRestDays
                 };
                 restDaysPerEmployee[name] = selectedDays.length + autoRestDays.length;
-                employeeRestHistory[name] = [];
             });
             
+            // 初始化每日休息统计数据
             let dailyRestCount = {};
             let dailyGroupRest = {};
             let dailyFemaleRest = {};
+            let dailyOnDuty = {};
             
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
                 dailyRestCount[dateStr] = 0;
                 dailyGroupRest[dateStr] = {};
                 dailyFemaleRest[dateStr] = 0;
+                dailyOnDuty[dateStr] = null;
                 
                 employeeList.forEach(name => {
                     if (employeeSchedule[name].selectedDays.includes(dateStr) || employeeSchedule[name].autoRestDays.includes(dateStr)) {
                         dailyRestCount[dateStr]++;
-                        const group = employeeGroups[name];
+                        const group = employeeGroups[name] || '无组别';
                         if (!dailyGroupRest[dateStr][group]) {
                             dailyGroupRest[dateStr][group] = 0;
                         }
@@ -702,10 +1034,12 @@
                 });
             }
             
+            // 获取需要安排额外休息的员工
             let shuffledEmployees = shuffleArray(employeeList.filter(name => {
                 return restDaysPerEmployee[name] < totalRestDays;
             }));
             
+            // 尝试生成排班表（最多10次尝试）
             for (let attempt = 0; attempt < 10; attempt++) {
                 let allSatisfied = true;
                 
@@ -715,6 +1049,7 @@
                     const remainingRest = totalRestDays - restDaysPerEmployee[name];
                     if (remainingRest <= 0) return;
                     
+                    // 计算当前员工已安排的休息日期
                     const currentRestDays = [
                         ...employeeSchedule[name].selectedDays.map(d => parseInt(d.split('-')[2])),
                         ...employeeSchedule[name].autoRestDays.map(d => parseInt(d.split('-')[2]))
@@ -722,42 +1057,52 @@
                     
                     let availableDays = [];
                     
+                    // 评估每个日期的适合度
                     for (let day = 1; day <= daysInMonth; day++) {
                         const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
                         const date = new Date(currentYear, currentMonth - 1, day);
                         const weekday = date.getDay();
-                        const group = employeeGroups[name];
+                        const group = employeeGroups[name] || '无组别';
                         const isFemale = femaleEmployees.includes(name);
                         
-                        if (employeeSchedule[name].selectedDays.includes(dateStr)) continue;
-                        if (employeeSchedule[name].autoRestDays.includes(dateStr)) continue;
+                        // 跳过已安排休息的日期
+                        if (employeeSchedule[name].selectedDays.includes(dateStr) || 
+                            employeeSchedule[name].autoRestDays.includes(dateStr)) {
+                            continue;
+                        }
                         
                         let priority = 0;
                         let valid = true;
                         
-                        if (name === '陈文童') {
-                            if (employeeSchedule['付新远'].selectedDays.includes(dateStr) || 
-                                employeeSchedule['付新远'].autoRestDays.includes(dateStr)) {
-                                valid = false;
-                            }
+                        // 特殊规则：陈文童和付新远不能同一天休息
+                        if (name === '陈文童' && 
+                            (employeeSchedule['付新远'].selectedDays.includes(dateStr) || 
+                             employeeSchedule['付新远'].autoRestDays.includes(dateStr))) {
+                            valid = false;
                         }
-                        if (name === '付新远') {
-                            if (employeeSchedule['陈文童'].selectedDays.includes(dateStr) || 
-                                employeeSchedule['陈文童'].autoRestDays.includes(dateStr)) {
-                                valid = false;
-                            }
+                        if (name === '付新远' && 
+                            (employeeSchedule['陈文童'].selectedDays.includes(dateStr) || 
+                             employeeSchedule['陈文童'].autoRestDays.includes(dateStr))) {
+                            valid = false;
                         }
                         
                         if (!valid) continue;
                         
-                        const prevDay = day > 1 ? currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day - 1).padStart(2, '0') : null;
-                        const nextDay = day < daysInMonth ? currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day + 1).padStart(2, '0') : null;
+                        // 计算前后日期的休息情况
+                        const prevDay = day > 1 ? 
+                            currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day - 1).padStart(2, '0') : null;
+                        const nextDay = day < daysInMonth ? 
+                            currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day + 1).padStart(2, '0') : null;
                         
-                        if ((prevDay && (employeeSchedule[name].selectedDays.includes(prevDay) || employeeSchedule[name].autoRestDays.includes(prevDay))) ||
-                            (nextDay && (employeeSchedule[name].selectedDays.includes(nextDay) || employeeSchedule[name].autoRestDays.includes(nextDay)))) {
+                        // 避免连续休息
+                        if ((prevDay && (employeeSchedule[name].selectedDays.includes(prevDay) || 
+                                         employeeSchedule[name].autoRestDays.includes(prevDay))) ||
+                            (nextDay && (employeeSchedule[name].selectedDays.includes(nextDay) || 
+                                         employeeSchedule[name].autoRestDays.includes(nextDay)))) {
                             priority -= 50;
                         }
                         
+                        // 计算与现有休息的距离
                         if (currentRestDays.length > 0) {
                             let minDistance = Infinity;
                             currentRestDays.forEach(restDay => {
@@ -767,35 +1112,54 @@
                                 }
                             });
                             
-                            if (minDistance >= 5 && minDistance <= 8) {
-                                priority += (8 - Math.abs(minDistance - 6)) * 20;
-                            } else if (minDistance < 5) {
-                                priority -= (5 - minDistance) * 30;
+                            // 避免过于接近现有休息
+                            if (minDistance < 3) {
+                                priority -= (3 - minDistance) * 30;
+                            } else {
+                                // 增加随机性，避免休息集中在月中
+                                priority += Math.random() * 20;
                             }
                         } else {
+                            // 没有休息安排时，优先安排周日，但增加随机性
                             if (weekday === 0) {
-                                priority += 50;
+                                priority += 30 + Math.random() * 20;
+                            } else {
+                                // 增加随机性，确保休息分布均匀
+                                priority += Math.random() * 15;
                             }
                         }
                         
+                        // 确保休息均匀分布在整个月
+                        // 计算日期在月中的位置（0-1之间）
+                        const monthPosition = (day - 1) / (daysInMonth - 1);
+                        // 避免休息集中在月中，增加月初和月末的优先级
+                        if (monthPosition < 0.2 || monthPosition > 0.8) {
+                            priority += 20;
+                        } else if (monthPosition >= 0.4 && monthPosition <= 0.6) {
+                            // 降低月中休息的优先级
+                            priority -= 10;
+                        }
+                        
+                        // 根据星期几调整优先级
                         if (weekday === 0) {
                             if (dailyRestCount[dateStr] < 7) {
                                 priority += 100 - dailyRestCount[dateStr];
                             }
                         } else if (weekday === 1) {
-                            if (dailyRestCount[dateStr] < 1) {
-                                priority += 10;
-                            }
+                            // 周一尽量不安排休息，降低优先级
+                            priority -= 100;
                         } else {
                             if (dailyRestCount[dateStr] < 2) {
                                 priority += 50 - dailyRestCount[dateStr];
                             }
                         }
                         
+                        // 避免同一组过多人休息
                         if (dailyGroupRest[dateStr][group] && dailyGroupRest[dateStr][group] >= 1) {
                             priority -= 30;
                         }
                         
+                        // 避免同一天过多女性员工休息
                         if (isFemale && dailyFemaleRest[dateStr] >= 1) {
                             priority -= 40;
                         }
@@ -805,6 +1169,7 @@
                         }
                     }
                     
+                    // 选择最合适的日期安排休息
                     if (availableDays.length > 0) {
                         availableDays.sort((a, b) => b.priority - a.priority);
                         
@@ -812,11 +1177,12 @@
                         const topDays = availableDays.filter(d => d.priority >= maxPriority - 10);
                         const selectedDay = topDays[Math.floor(Math.random() * topDays.length)];
                         
+                        // 更新排班数据
                         employeeSchedule[name].autoRestDays.push(selectedDay.dateStr);
                         dailyRestCount[selectedDay.dateStr]++;
                         restDaysPerEmployee[name]++;
                         
-                        const group = employeeGroups[name];
+                        const group = employeeGroups[name] || '无组别';
                         if (!dailyGroupRest[selectedDay.dateStr][group]) {
                             dailyGroupRest[selectedDay.dateStr][group] = 0;
                         }
@@ -830,15 +1196,457 @@
                     }
                 });
                 
+                // 检查是否所有员工都已安排足够的休息
                 const allComplete = employeeList.every(name => restDaysPerEmployee[name] >= totalRestDays);
                 if (allComplete) break;
+            }
+            
+            // 安排值班（连续值班，休息的人当天不安排值班，值班中间不穿插休息）
+            const onDutyExcluded = ['谢焕君', '付新远', '陈文童', '陈安然', '黄丽情', '崔斯欣'];
+            // 常规值班候选人（不包括林镇兴，且必须有组别）
+            const regularOnDutyCandidates = employeeList.filter(name => 
+                !onDutyExcluded.includes(name) && 
+                name !== '林镇兴' && 
+                employeeGroups[name] !== undefined && 
+                employeeGroups[name] !== ''
+            );
+            const regularCandidateCount = regularOnDutyCandidates.length;
+            
+            // 计算每个人的值班天数
+            const dutyDaysPerPerson = {};
+            let extraDays = 0;
+            
+            if (regularCandidateCount > 0) {
+                // 计算基础值班天数
+                const baseDutyDays = Math.floor(daysInMonth / regularCandidateCount);
+                extraDays = daysInMonth % regularCandidateCount;
+                
+                // 为常规值班人员分配基础天数
+                regularOnDutyCandidates.forEach(candidate => {
+                    dutyDaysPerPerson[candidate] = baseDutyDays;
+                });
+                
+                // 确保每个人至少有1天值班
+                regularOnDutyCandidates.forEach(candidate => {
+                    if (dutyDaysPerPerson[candidate] < 1) {
+                        dutyDaysPerPerson[candidate] = 1;
+                    }
+                });
+            }
+            
+            // 所有值班候选人（包括林镇兴，用于填充剩余天数，且必须有组别）
+            const allOnDutyCandidates = employeeList.filter(name => 
+                !onDutyExcluded.includes(name) && 
+                employeeGroups[name] !== undefined && 
+                employeeGroups[name] !== ''
+            );
+            
+            if (regularCandidateCount > 0) {
+                // 随机打乱候选人顺序，增加公平性
+                const shuffledCandidates = shuffleArray([...regularOnDutyCandidates]);
+                
+                // 跟踪每个人已经安排的值班天数
+                const assignedDutyDays = {};
+                regularOnDutyCandidates.forEach(candidate => {
+                    assignedDutyDays[candidate] = 0;
+                });
+                
+                // 为每个常规候选人找到连续的值班时间段
+                shuffledCandidates.forEach(candidate => {
+                    const dutyDays = dutyDaysPerPerson[candidate];
+                    
+                    // 找到所有可用的连续工作段
+                    const allWorkStreaks = [];
+                    
+                    // 遍历所有可能的连续工作段
+                    for (let startDay = 1; startDay <= daysInMonth; startDay++) {
+                        let currentStreak = [];
+                        for (let day = startDay; day <= daysInMonth; day++) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            const isResting = employeeSchedule[candidate].selectedDays.includes(dateStr) || 
+                                             employeeSchedule[candidate].autoRestDays.includes(dateStr);
+                            
+                            if (!isResting && !dailyOnDuty[dateStr]) {
+                                currentStreak.push(day);
+                            } else {
+                                break;
+                            }
+                        }
+                        
+                        if (currentStreak.length >= dutyDays) {
+                            allWorkStreaks.push(currentStreak);
+                        }
+                    }
+                    
+                    // 如果找到足够长的连续段，选择一个来安排值班
+                    if (allWorkStreaks.length > 0) {
+                        // 选择第一个足够长的连续段
+                        const selectedStreak = allWorkStreaks[0];
+                        // 安排连续的值班天数
+                        for (let i = 0; i < dutyDays; i++) {
+                            const day = selectedStreak[i];
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            dailyOnDuty[dateStr] = candidate;
+                            assignedDutyDays[candidate]++;
+                        }
+                    } else {
+                        // 如果没有找到足够长的连续段，找到最长的连续段
+                        const allPossibleStreaks = [];
+                        for (let startDay = 1; startDay <= daysInMonth; startDay++) {
+                            let currentStreak = [];
+                            for (let day = startDay; day <= daysInMonth; day++) {
+                                const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                const isResting = employeeSchedule[candidate].selectedDays.includes(dateStr) || 
+                                                 employeeSchedule[candidate].autoRestDays.includes(dateStr);
+                                
+                                if (!isResting && !dailyOnDuty[dateStr]) {
+                                    currentStreak.push(day);
+                                } else {
+                                    break;
+                                }
+                            }
+                            
+                            if (currentStreak.length > 0) {
+                                allPossibleStreaks.push(currentStreak);
+                            }
+                        }
+                        
+                        if (allPossibleStreaks.length > 0) {
+                            // 按长度排序
+                            allPossibleStreaks.sort((a, b) => b.length - a.length);
+                            
+                            // 安排最长的连续段
+                            const longestStreak = allPossibleStreaks[0];
+                            for (const day of longestStreak) {
+                                if (assignedDutyDays[candidate] >= dutyDays) break;
+                                const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                dailyOnDuty[dateStr] = candidate;
+                                assignedDutyDays[candidate]++;
+                            }
+                            
+                            // 安排剩余的值班天数
+                            let remaining = dutyDays - assignedDutyDays[candidate];
+                            if (remaining > 0) {
+                                // 找到其他可用的连续段
+                                for (const streak of allPossibleStreaks.slice(1)) {
+                                    if (remaining <= 0) break;
+                                    for (const day of streak) {
+                                        if (remaining <= 0) break;
+                                        const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                        dailyOnDuty[dateStr] = candidate;
+                                        assignedDutyDays[candidate]++;
+                                        remaining--;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 收集需要林镇兴值班的日期
+                const linOnDutyDays = [];
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    if (!dailyOnDuty[dateStr]) {
+                        // 首先尝试安排给值班天数不足的常规候选人
+                        const availableRegularCandidates = regularOnDutyCandidates.filter(candidate => {
+                            const isResting = employeeSchedule[candidate].selectedDays.includes(dateStr) || 
+                                             employeeSchedule[candidate].autoRestDays.includes(dateStr);
+                            return !isResting && assignedDutyDays[candidate] < dutyDaysPerPerson[candidate];
+                        });
+                        
+                        if (availableRegularCandidates.length > 0) {
+                            // 按值班天数从少到多排序
+                            availableRegularCandidates.sort((a, b) => assignedDutyDays[a] - assignedDutyDays[b]);
+                            // 选择值班天数最少的人
+                            const selectedCandidate = availableRegularCandidates[0];
+                            dailyOnDuty[dateStr] = selectedCandidate;
+                            assignedDutyDays[selectedCandidate]++;
+                        } else {
+                            // 收集需要林镇兴值班的日期
+                            linOnDutyDays.push(day);
+                        }
+                    }
+                }
+                
+                // 为林镇兴安排连续的值班日期
+                if (linOnDutyDays.length > 0) {
+                    // 找到林镇兴的所有可用连续工作段
+                    const linWorkStreaks = [];
+                    
+                    // 遍历所有可能的连续工作段
+                    for (let startDay = 1; startDay <= daysInMonth; startDay++) {
+                        let currentStreak = [];
+                        for (let day = startDay; day <= daysInMonth; day++) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            const isResting = employeeSchedule['林镇兴'] && 
+                                             (employeeSchedule['林镇兴'].selectedDays.includes(dateStr) || 
+                                              employeeSchedule['林镇兴'].autoRestDays.includes(dateStr));
+                            
+                            if (!isResting && !dailyOnDuty[dateStr]) {
+                                currentStreak.push(day);
+                            } else {
+                                break;
+                            }
+                        }
+                        
+                        if (currentStreak.length > 0) {
+                            linWorkStreaks.push(currentStreak);
+                        }
+                    }
+                    
+                    // 按长度排序，优先选择长的连续段
+                    linWorkStreaks.sort((a, b) => b.length - a.length);
+                    
+                    // 安排林镇兴的值班日期
+                    let assignedDays = 0;
+                    for (const streak of linWorkStreaks) {
+                        if (assignedDays >= linOnDutyDays.length) break;
+                        
+                        for (const day of streak) {
+                            if (assignedDays >= linOnDutyDays.length) break;
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            dailyOnDuty[dateStr] = '林镇兴';
+                            assignedDays++;
+                        }
+                    }
+                    
+                    // 如果还有未安排的日期，随机安排
+                    if (assignedDays < linOnDutyDays.length) {
+                        for (const day of linOnDutyDays) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            if (!dailyOnDuty[dateStr]) {
+                                dailyOnDuty[dateStr] = '林镇兴';
+                            }
+                        }
+                    }
+                }
+                
+                // 最后验证所有常规候选人都有值班天数
+                regularOnDutyCandidates.forEach(candidate => {
+                    // 确保每个人都有值班天数
+                    if (assignedDutyDays[candidate] === 0) {
+                        // 为没有值班的人找到一个连续的工作段
+                        let assigned = false;
+                        
+                        // 找到该候选人的所有可用连续工作段
+                        const candidateWorkStreaks = [];
+                        for (let startDay = 1; startDay <= daysInMonth; startDay++) {
+                            let currentStreak = [];
+                            for (let day = startDay; day <= daysInMonth; day++) {
+                                const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                const isResting = employeeSchedule[candidate].selectedDays.includes(dateStr) || 
+                                                 employeeSchedule[candidate].autoRestDays.includes(dateStr);
+                                
+                                if (!isResting) {
+                                    currentStreak.push(day);
+                                } else {
+                                    break;
+                                }
+                            }
+                            
+                            if (currentStreak.length > 0) {
+                                candidateWorkStreaks.push(currentStreak);
+                            }
+                        }
+                        
+                        // 按长度排序，优先选择长的连续段
+                        candidateWorkStreaks.sort((a, b) => b.length - a.length);
+                        
+                        // 尝试在连续段中安排值班
+                        for (const streak of candidateWorkStreaks) {
+                            // 检查连续段中是否有可以替换的日期
+                            for (const day of streak) {
+                                const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                const currentOnDuty = dailyOnDuty[dateStr];
+                                
+                                if (currentOnDuty === '林镇兴' || 
+                                    (currentOnDuty && assignedDutyDays[currentOnDuty] > dutyDaysPerPerson[currentOnDuty])) {
+                                    // 替换当天的值班人员
+                                    dailyOnDuty[dateStr] = candidate;
+                                    assignedDutyDays[candidate]++;
+                                    if (currentOnDuty && currentOnDuty !== '林镇兴') {
+                                        assignedDutyDays[currentOnDuty]--;
+                                    }
+                                    assigned = true;
+                                    
+                                    // 尝试在连续段中安排更多值班天数
+                                    let remainingDays = dutyDaysPerPerson[candidate] - 1;
+                                    for (let i = streak.indexOf(day) + 1; i < streak.length && remainingDays > 0; i++) {
+                                        const nextDay = streak[i];
+                                        const nextDateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(nextDay).padStart(2, '0');
+                                        const nextCurrentOnDuty = dailyOnDuty[nextDateStr];
+                                        
+                                        if (nextCurrentOnDuty === '林镇兴' || 
+                                            (nextCurrentOnDuty && assignedDutyDays[nextCurrentOnDuty] > dutyDaysPerPerson[nextCurrentOnDuty])) {
+                                            dailyOnDuty[nextDateStr] = candidate;
+                                            assignedDutyDays[candidate]++;
+                                            if (nextCurrentOnDuty && nextCurrentOnDuty !== '林镇兴') {
+                                                assignedDutyDays[nextCurrentOnDuty]--;
+                                            }
+                                            remainingDays--;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            if (assigned) break;
+                        }
+                        
+                        // 如果还是没有找到合适的日期，随机替换一天
+                        if (!assigned) {
+                            const randomDay = Math.floor(Math.random() * daysInMonth) + 1;
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(randomDay).padStart(2, '0');
+                            const currentOnDuty = dailyOnDuty[dateStr];
+                            if (currentOnDuty && currentOnDuty !== '林镇兴') {
+                                assignedDutyDays[currentOnDuty]--;
+                            }
+                            dailyOnDuty[dateStr] = candidate;
+                            assignedDutyDays[candidate]++;
+                        }
+                    }
+                    
+                    // 确保每个人的值班天数不超过分配的天数
+                    while (assignedDutyDays[candidate] > dutyDaysPerPerson[candidate]) {
+                        // 找到该候选人值班的连续段
+                        const candidateDutyStreaks = [];
+                        let currentStreak = [];
+                        
+                        for (let day = 1; day <= daysInMonth; day++) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            if (dailyOnDuty[dateStr] === candidate) {
+                                currentStreak.push(day);
+                            } else if (currentStreak.length > 0) {
+                                candidateDutyStreaks.push(currentStreak);
+                                currentStreak = [];
+                            }
+                        }
+                        if (currentStreak.length > 0) {
+                            candidateDutyStreaks.push(currentStreak);
+                        }
+                        
+                        // 按长度排序，优先选择短的连续段
+                        candidateDutyStreaks.sort((a, b) => a.length - b.length);
+                        
+                        // 尝试从短的连续段中调整值班天数
+                        for (const streak of candidateDutyStreaks) {
+                            for (const day of streak) {
+                                const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                                
+                                // 尝试安排给林镇兴
+                                const isLinResting = employeeSchedule['林镇兴'] && 
+                                                   (employeeSchedule['林镇兴'].selectedDays.includes(dateStr) || 
+                                                    employeeSchedule['林镇兴'].autoRestDays.includes(dateStr));
+                                
+                                if (!isLinResting) {
+                                    // 安排给林镇兴
+                                    dailyOnDuty[dateStr] = '林镇兴';
+                                    assignedDutyDays[candidate]--;
+                                    break;
+                                } else {
+                                    // 找到当天不休息且值班天数不足的其他常规候选人
+                                    const availableCandidates = regularOnDutyCandidates.filter(c => {
+                                        const isResting = employeeSchedule[c].selectedDays.includes(dateStr) || 
+                                                         employeeSchedule[c].autoRestDays.includes(dateStr);
+                                        return c !== candidate && !isResting && assignedDutyDays[c] < dutyDaysPerPerson[c];
+                                    });
+                                    
+                                    if (availableCandidates.length > 0) {
+                                        // 按值班天数从少到多排序
+                                        availableCandidates.sort((a, b) => assignedDutyDays[a] - assignedDutyDays[b]);
+                                        // 选择值班天数最少的人
+                                        const selectedCandidate = availableCandidates[0];
+                                        dailyOnDuty[dateStr] = selectedCandidate;
+                                        assignedDutyDays[candidate]--;
+                                        assignedDutyDays[selectedCandidate]++;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (assignedDutyDays[candidate] <= dutyDaysPerPerson[candidate]) break;
+                        }
+                    }
+                });
+                
+                // 重新为林镇兴安排连续的值班日期
+                const linDutyDays = [];
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    if (dailyOnDuty[dateStr] === '林镇兴') {
+                        linDutyDays.push(day);
+                    }
+                }
+                
+                // 清除林镇兴的值班日期
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                    if (dailyOnDuty[dateStr] === '林镇兴') {
+                        delete dailyOnDuty[dateStr];
+                    }
+                }
+                
+                // 重新为林镇兴安排连续的值班日期
+                if (linDutyDays.length > 0) {
+                    // 找到林镇兴的所有可用连续工作段
+                    const linWorkStreaks = [];
+                    
+                    // 遍历所有可能的连续工作段
+                    for (let startDay = 1; startDay <= daysInMonth; startDay++) {
+                        let currentStreak = [];
+                        for (let day = startDay; day <= daysInMonth; day++) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            const isResting = employeeSchedule['林镇兴'] && 
+                                             (employeeSchedule['林镇兴'].selectedDays.includes(dateStr) || 
+                                              employeeSchedule['林镇兴'].autoRestDays.includes(dateStr));
+                            
+                            if (!isResting && !dailyOnDuty[dateStr]) {
+                                currentStreak.push(day);
+                            } else {
+                                break;
+                            }
+                        }
+                        
+                        if (currentStreak.length > 0) {
+                            linWorkStreaks.push(currentStreak);
+                        }
+                    }
+                    
+                    // 按长度排序，优先选择长的连续段
+                    linWorkStreaks.sort((a, b) => b.length - a.length);
+                    
+                    // 安排林镇兴的值班日期
+                    let assignedDays = 0;
+                    for (const streak of linWorkStreaks) {
+                        if (assignedDays >= linDutyDays.length) break;
+                        
+                        for (const day of streak) {
+                            if (assignedDays >= linDutyDays.length) break;
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            dailyOnDuty[dateStr] = '林镇兴';
+                            assignedDays++;
+                        }
+                    }
+                    
+                    // 如果还有未安排的日期，随机安排
+                    if (assignedDays < linDutyDays.length) {
+                        for (let i = assignedDays; i < linDutyDays.length; i++) {
+                            const day = linDutyDays[i];
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            if (!dailyOnDuty[dateStr]) {
+                                dailyOnDuty[dateStr] = '林镇兴';
+                            }
+                        }
+                    }
+                }
             }
             
             let html = `
                 <table class="fixed-table">
                     <thead>
                         <tr>
-                            <th class="col-small header-cell" style="background: #f0f0f0;">上班</th>
+                            <th class="col-small header-cell" style="background: #ffffff;">上班</th>
                             <th class="col-small header-cell rest" style="background: #FFFF00;">休息</th>
                             <th class="col-small header-cell assigned" style="background: #800080; color: white;">指定休</th>
                             <th class="col-small header-cell on-duty" style="background: #FF0000; color: white;">上&amp;值</th>
@@ -902,7 +1710,7 @@
                     <tr style="${rowStyle}">
                         <td>${index + 1}</td>
                         <td style="font-weight: bold; color: black;">${name}</td>
-                        <td>${employeeGroups[name]}</td>
+                        <td>${employeeGroups[name] || '无组别'}</td>
                         <td>${actualRestDays}</td>
                 `;
                 
@@ -916,6 +1724,10 @@
                     if (day > daysInMonth) {
                         cellText = '';
                         cellClass = 'empty';
+                    } else if (dailyOnDuty && dailyOnDuty[dateStr] === name) {
+                        cellClass = 'on-duty';
+                        cellText = '上&值';
+                        cellType = 'on-duty';
                     } else if (employeeSchedule[name].selectedDays.includes(dateStr)) {
                         cellClass = 'assigned';
                         cellText = '指定休';
@@ -947,6 +1759,7 @@
             currentSchedule = {
                 employeeSchedule: employeeSchedule,
                 dailyRestCount: dailyRestCount,
+                dailyOnDuty: dailyOnDuty,
                 daysInMonth: daysInMonth
             };
             scheduleLoaded = true;
@@ -972,18 +1785,25 @@
             
             currentSchedule = JSON.parse(savedData);
             scheduleLoaded = true;
-            renderEditableSchedule();
+            
+            // 检查是否为过去的月份
+            const pastMonth = isPastMonth();
+            // 检查是否为已确认的排班
+            const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
+            const hasConfirmedSchedule = localStorage.getItem(finalKey) !== null;
+            
+            renderEditableSchedule(pastMonth || hasConfirmedSchedule);
         }
         
-        function renderEditableSchedule() {
+        function renderEditableSchedule(isConfirmed = false) {
             const container = document.getElementById('scheduleContainer');
-            const { employeeSchedule, dailyRestCount, daysInMonth } = currentSchedule;
+            const { employeeSchedule, dailyRestCount, dailyOnDuty, daysInMonth } = currentSchedule;
             
             let html = `
                 <table class="fixed-table">
                     <thead>
                         <tr>
-                            <th class="col-small header-cell" style="background: #f0f0f0;">上班</th>
+                            <th class="col-small header-cell" style="background: #ffffff;">上班</th>
                             <th class="col-small header-cell rest" style="background: #FFFF00;">休息</th>
                             <th class="col-small header-cell assigned" style="background: #800080; color: white;">指定休</th>
                             <th class="col-small header-cell on-duty" style="background: #FF0000; color: white;">上&amp;值</th>
@@ -1047,7 +1867,7 @@
                     <tr style="${rowStyle}">
                         <td>${index + 1}</td>
                         <td style="font-weight: bold; color: black;">${name}</td>
-                        <td>${employeeGroups[name]}</td>
+                        <td>${employeeGroups[name] || '无组别'}</td>
                         <td>${actualRestDays}</td>
                 `;
                 
@@ -1061,6 +1881,10 @@
                     if (day > daysInMonth) {
                         cellText = '';
                         cellClass = 'empty';
+                    } else if (dailyOnDuty && dailyOnDuty[dateStr] === name) {
+                        cellClass = 'on-duty';
+                        cellText = '上&值';
+                        cellType = 'on-duty';
                     } else if (employeeSchedule[name].selectedDays.includes(dateStr)) {
                         cellClass = 'assigned';
                         cellText = '指定休';
@@ -1072,7 +1896,16 @@
                     }
                     
                     let style = day > daysInMonth ? 'background: #f0f0f0; color: #ccc; cursor: default;' : '';
-                    html += `<td class="editable-cell ${cellClass}" data-name="${name}" data-day="${day}" data-type="${cellType}" style="${style}">${cellText}</td>`;
+                    let cellClassFinal = cellClass;
+                    
+                    // 如果是已确认的排班或不能编辑的月份，禁用编辑功能
+                    if (isConfirmed || !canEditSchedule()) {
+                        style += 'cursor: default; pointer-events: none;';
+                    } else {
+                        cellClassFinal += ' editable-cell';
+                    }
+                    
+                    html += `<td class="${cellClassFinal}" data-name="${name}" data-day="${day}" data-type="${cellType}" style="${style}">${cellText}</td>`;
                 }
                 
                 html += `
@@ -1090,7 +1923,11 @@
             `;
             
             container.innerHTML = html;
-            addClickHandlers();
+            
+            // 只有非确认状态且可以编辑的月份才添加点击处理程序
+            if (!isConfirmed && canEditSchedule()) {
+                addClickHandlers();
+            }
         }
         
         function addClickHandlers() {
@@ -1140,9 +1977,10 @@
         }
         
         function closeDropdown(e) {
-            if (dropdownMenu && !dropdownMenu.contains(e?.target) && e?.target !== currentEditingCell) {
+            if (dropdownMenu && !dropdownMenu.contains(e?.target) && (!currentEditingCell || e?.target !== currentEditingCell)) {
                 dropdownMenu.classList.remove('show');
                 document.querySelectorAll('.editable-cell.active').forEach(c => c.classList.remove('active'));
+                currentEditingCell = null;
                 document.removeEventListener('click', closeDropdown);
             }
         }
@@ -1160,9 +1998,27 @@
             }
             
             const rect = cell.getBoundingClientRect();
-            dropdownMenu.style.top = (rect.bottom + 5) + 'px';
-            dropdownMenu.style.left = rect.left + 'px';
-            dropdownMenu.style.minWidth = (rect.width * 2) + 'px';
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // 计算下拉菜单的位置，确保在屏幕内显示
+            let top = rect.bottom + 5;
+            let left = rect.left;
+            
+            // 检查右侧空间是否足够
+            if (left + 160 > windowWidth) {
+                left = windowWidth - 160;
+            }
+            
+            // 检查底部空间是否足够
+            if (top + 200 > windowHeight) {
+                top = rect.top - 200;
+                if (top < 0) top = 10;
+            }
+            
+            dropdownMenu.style.top = top + 'px';
+            dropdownMenu.style.left = left + 'px';
+            dropdownMenu.style.minWidth = '160px';
             dropdownMenu.classList.add('show');
             
             // 确保添加点击事件监听器
@@ -1281,6 +2137,65 @@
             a.download = currentYear + '年' + currentMonth + '月份云仓排班表.xls';
             a.click();
             URL.revokeObjectURL(url);
+        }
+        
+        function confirmSchedule() {
+            const container = document.getElementById('scheduleContainer');
+            if (container.querySelector('table') === null) {
+                alert('请先生成排班表！');
+                return;
+            }
+            
+            if (!currentSchedule) {
+                alert('请先生成排班表！');
+                return;
+            }
+            
+            if (confirm('确定要最终确认排班表吗？确认后将无法再修改！')) {
+                // 保存最终版本的排班表
+                const key = getScheduleKey();
+                const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
+                
+                // 保存最终确认的排班表
+                localStorage.setItem(finalKey, JSON.stringify(currentSchedule));
+                
+                // 禁用编辑功能
+                const editableCells = document.querySelectorAll('.editable-cell');
+                editableCells.forEach(cell => {
+                    cell.style.cursor = 'default';
+                    cell.style.pointerEvents = 'none';
+                    cell.classList.remove('editable-cell');
+                });
+                
+                // 更新生成按钮状态，禁用一键生成排班表
+                updateGenerateButtonStatus();
+                
+                // 显示确认信息
+                alert('排班表已成功确认！');
+                
+                // 可以在这里添加其他确认后的操作，比如发送通知等
+            }
+        }
+        
+        function confirmBackHome() {
+            // 检查是否有排班表数据
+            if (currentSchedule) {
+                const key = getScheduleKey();
+                const savedData = localStorage.getItem(key);
+                
+                // 检查是否有未保存的修改
+                if (savedData) {
+                    const savedSchedule = JSON.parse(savedData);
+                    // 简单比较是否有修改
+                    if (JSON.stringify(currentSchedule) !== JSON.stringify(savedSchedule)) {
+                        return confirm('您有未保存的排班表修改，确定要返回首页吗？');
+                    }
+                } else {
+                    // 有排班表但未保存
+                    return confirm('您有未保存的排班表，确定要返回首页吗？');
+                }
+            }
+            return true;
         }
         
         init();
