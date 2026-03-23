@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0, minimum-scale=0.5">
     <title>排班表生成</title>
     <style>
         * {
@@ -399,13 +399,10 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .schedule-container {
-            background: white;
-            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             overflow-x: auto;
             position: relative;
-            margin-bottom: 30px;
+            margin-top: 20px;
         }
         
         /* 隐藏滚动条但保持滚动功能 */
@@ -637,6 +634,48 @@
         .print-btn:active {
             transform: translateY(0);
         }
+        
+        .main-container {
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .header-module {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .schedule-container {
+            background: white;
+            padding: 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            border-bottom: none;
+        }
+        
+        .header-table td {
+            border: 1px solid #000;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .header-table tr:first-child td {
+            border-bottom: 2px solid #000;
+        }
+        
+        .fixed-table {
+            border-top: none;
+        }
+        
         @media print {
             .controls, .back-btn, .print-btn {
                 display: none;
@@ -645,8 +684,15 @@
                 padding: 0;
                 background: white;
             }
-            .schedule-container {
+            .main-container {
+                border: 2px solid #000;
                 box-shadow: none;
+            }
+            .header-module {
+                padding: 10px;
+                border-bottom: 1px solid #000;
+            }
+            .schedule-container {
                 padding: 10px;
             }
         }
@@ -656,40 +702,48 @@
     <div class="container">
         <a href="index.html" class="back-btn" onclick="return confirmBackHome()">← 返回首页</a>
         
-        <h1>📋 排班表生成</h1>
-        
-        <div class="controls">
-            <div class="control-row">
-                <div class="control-item">
-                    <div class="month-selector">
-                        <label>选择月份：</label>
-                        <select id="yearSelect" onchange="onMonthChange()">
-                        </select>
-                        <select id="monthSelect" onchange="onMonthChange()">
-                        </select>
-                    </div>
+        <div class="main-container">
+            <div class="schedule-container" id="scheduleContainer">
+                <table class="header-table">
+                    <tr>
+                        <td colspan="4" style="text-align: center; font-size: 24px; font-weight: bold;">📋 排班表生成</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="controls">
+                                <div class="control-row">
+                                    <div class="control-item">
+                                        <div class="month-selector">
+                                            <label>选择月份：</label>
+                                            <select id="yearSelect" onchange="onMonthChange()">
+                                            </select>
+                                            <select id="monthSelect" onchange="onMonthChange()">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="rest-days-info">
+                                            <label>⚠️ 本月应休天数设置：</label>
+                                            <span class="rest-days-value" id="totalRestDaysDisplay">4</span>
+                                            <label>天</label>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="btn-group">
+                                        <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
+                                        <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
+                                        <button class="btn btn-success" onclick="confirmSchedule()">✅ 确定排班</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div style="text-align: center; padding: 60px; color: #999;">
+                    <p style="font-size: 18px; margin-bottom: 10px;">请点击"一键生成排班表"按钮</p>
+                    <p>系统将根据员工提交的指定休数据自动生成排班表</p>
                 </div>
-                <div class="control-item">
-                    <div class="rest-days-info">
-                        <label>⚠️ 本月应休天数设置：</label>
-                        <span class="rest-days-value" id="totalRestDaysDisplay">4</span>
-                        <label>天</label>
-                    </div>
-                </div>
-                <div class="control-item">
-                    <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
-                    <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
-                    <button class="btn btn-success" onclick="confirmSchedule()">✅ 确定排班</button>
-                </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="schedule-container" id="scheduleContainer">
-            <div style="text-align: center; padding: 60px; color: #999;">
-                <p style="font-size: 18px; margin-bottom: 10px;">请点击"一键生成排班表"按钮</p>
-                <p>系统将根据员工提交的指定休数据自动生成排班表</p>
             </div>
         </div>
     </div>
@@ -867,23 +921,19 @@
                 return false;
             }
             
+            // 检查当前月份与目标月份的关系
             const now = new Date();
-            const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const currentYearNow = now.getFullYear();
+            const currentMonthNow = now.getMonth() + 1;
+            let monthDiff = (currentYear - currentYearNow) * 12 + (currentMonth - currentMonthNow);
             
-            // 计算目标月份的上个月的25号和最后一天
-            const targetMonth = currentMonth;
-            const targetYear = currentYear;
-            const lastDayOfPreviousMonth = new Date(targetYear, targetMonth - 1, 0);
-            const cutoffDate = new Date(targetYear, targetMonth - 1, 25);
-            
-            // 如果当前月份就是目标月份，不能编辑
-            if (now.getFullYear() === targetYear && now.getMonth() + 1 === targetMonth) {
+            // 如果是本月，不能编辑
+            if (monthDiff === 0) {
                 return false;
             }
             
-            // 如果当前日期在目标月份的上个月的25号之前，可以编辑（收集指定休息时间）
-            // 如果当前日期在目标月份的上个月的26号到最后一天之间，可以编辑（排班确定时间）
-            if (currentDate <= lastDayOfPreviousMonth) {
+            // 如果是下个月或更晚的月份，可以编辑
+            if (monthDiff >= 1) {
                 return true;
             }
             
@@ -901,26 +951,29 @@
             const finalKey = 'final_confirmed_schedule_' + currentYear + '_' + currentMonth;
             const hasConfirmedSchedule = localStorage.getItem(finalKey) !== null;
             
-            // 检查是否在排班确定时间内
+            // 检查当前月份与目标月份的关系
             const now = new Date();
-            const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const targetMonth = currentMonth;
-            const targetYear = currentYear;
-            const lastDayOfPreviousMonth = new Date(targetYear, targetMonth - 1, 0);
+            const currentYearNow = now.getFullYear();
+            const currentMonthNow = now.getMonth() + 1;
+            
+            // 计算目标月份与当前月份的差值
+            let monthDiff = (currentYear - currentYearNow) * 12 + (currentMonth - currentMonthNow);
             
             // 如果是过去的月份，禁用生成按钮
             if (pastMonth) {
                 generateButton.disabled = true;
             } 
-            // 如果当前日期在目标月份的上个月的最后一天之前，即使已经确认排班，也可以生成
-            else if (currentDate <= lastDayOfPreviousMonth) {
+            // 如果是本月，禁用生成按钮
+            else if (monthDiff === 0) {
+                generateButton.disabled = true;
+            }
+            // 如果是下个月或更晚的月份，可以生成
+            else if (monthDiff >= 1) {
                 generateButton.disabled = false;
             }
-            // 如果已经确认排班，禁用生成按钮
-            else if (hasConfirmedSchedule) {
+            // 其他情况，禁用生成按钮
+            else {
                 generateButton.disabled = true;
-            } else {
-                generateButton.disabled = false;
             }
         }
         
@@ -1010,6 +1063,8 @@
         
         function generateSchedule() {
             console.log('开始生成排班表...');
+            console.log('员工列表长度:', employeeList.length);
+            console.log('员工列表内容:', employeeList);
             
             // 检查是否为过去的月份
             const now = new Date();
@@ -1018,6 +1073,16 @@
             
             if (lastDayOfMonth < now) {
                 alert('该月份已经过去，不能生成新的排班表，请查看历史记录！');
+                return;
+            }
+            
+            // 检查是否为当前月份
+            const currentYearNow = now.getFullYear();
+            const currentMonthNow = now.getMonth() + 1;
+            let monthDiff = (currentYear - currentYearNow) * 12 + (currentMonth - currentMonthNow);
+            
+            if (monthDiff === 0) {
+                alert('本月的排班在本月内不能生成，请选择下个月或更晚的月份！');
                 return;
             }
             
@@ -1201,6 +1266,26 @@
                             (nextDay && (empSchedule.selectedDays.includes(nextDay) || 
                                          empSchedule.autoRestDays.includes(nextDay)))) {
                             priority -= 50;
+                        }
+                        
+                        // 计算连续上班天数
+                        let consecutiveWorkDays = 0;
+                        for (let i = day - 1; i >= 1; i--) {
+                            const checkDateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                            if (empSchedule.selectedDays.includes(checkDateStr) || 
+                                empSchedule.autoRestDays.includes(checkDateStr)) {
+                                break;
+                            }
+                            consecutiveWorkDays++;
+                        }
+                        
+                        // 如果连续上班天数接近7天，优先安排休息
+                        if (consecutiveWorkDays >= 6) {
+                            priority += 200; // 高优先级安排休息
+                        } else if (consecutiveWorkDays >= 5) {
+                            priority += 150; // 较高优先级安排休息
+                        } else if (consecutiveWorkDays >= 4) {
+                            priority += 100; // 中等优先级安排休息
                         }
                         
                         // 计算与现有休息的距离
@@ -1747,6 +1832,42 @@
             }
             
             let html = `
+                <table class="header-table">
+                    <tr>
+                        <td colspan="4" style="text-align: center; font-size: 24px; font-weight: bold;">📋 排班表生成</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="controls">
+                                <div class="control-row">
+                                    <div class="control-item">
+                                        <div class="month-selector">
+                                            <label>选择月份：</label>
+                                            <select id="yearSelect" onchange="onMonthChange()">
+                                            </select>
+                                            <select id="monthSelect" onchange="onMonthChange()">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="rest-days-info">
+                                            <label>⚠️ 本月应休天数设置：</label>
+                                            <span class="rest-days-value" id="totalRestDaysDisplay">${totalRestDays}</span>
+                                            <label>天</label>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="btn-group">
+                                        <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
+                                        <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
+                                        <button class="btn btn-success" onclick="confirmSchedule()">✅ 确定排班</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
                 <table class="fixed-table">
                     <thead>
                         <tr>
@@ -1803,7 +1924,9 @@
                     <tbody>
             `;
             
+            console.log('开始渲染员工数据行...');
             employeeList.forEach((name, index) => {
+                console.log('渲染员工:', name, '索引:', index);
                 let rowStyle = '';
                 if (index % 2 === 1) {
                     rowStyle = 'background: #FFFF00;';
@@ -1852,6 +1975,8 @@
                     </tr>
                 `;
             });
+            console.log('员工数据行渲染完成');
+            console.log('生成的HTML长度:', html.length);
             
             html += `
                     </tbody>
@@ -1862,6 +1987,126 @@
                 </div>
             `;
             
+            // 验证连续上班天数
+            function validateConsecutiveWorkDays() {
+                let allValid = true;
+                let issues = [];
+                
+                employeeList.forEach(name => {
+                    const empSchedule = employeeSchedule[name] || { selectedDays: [], autoRestDays: [] };
+                    let consecutiveWorkDays = 0;
+                    let maxConsecutive = 0;
+                    
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                        const isResting = empSchedule.selectedDays.includes(dateStr) || 
+                                         empSchedule.autoRestDays.includes(dateStr);
+                        
+                        if (isResting) {
+                            consecutiveWorkDays = 0;
+                        } else {
+                            consecutiveWorkDays++;
+                            if (consecutiveWorkDays > maxConsecutive) {
+                                maxConsecutive = consecutiveWorkDays;
+                            }
+                        }
+                    }
+                    
+                    if (maxConsecutive > 7) {
+                        allValid = false;
+                        issues.push(`${name} 连续上班 ${maxConsecutive} 天，超过了7天限制`);
+                    }
+                });
+                
+                return { allValid, issues };
+            }
+            
+            // 执行验证
+            const validation = validateConsecutiveWorkDays();
+            if (!validation.allValid) {
+                console.warn('排班表存在连续上班天数超过7天的问题:', validation.issues);
+                
+                // 自动调整逻辑
+                function adjustConsecutiveWorkDays() {
+                    employeeList.forEach(name => {
+                        const empSchedule = employeeSchedule[name] || { selectedDays: [], autoRestDays: [] };
+                        let consecutiveWorkDays = 0;
+                        let workStreak = [];
+                        
+                        for (let day = 1; day <= daysInMonth; day++) {
+                            const dateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                            const isResting = empSchedule.selectedDays.includes(dateStr) || 
+                                             empSchedule.autoRestDays.includes(dateStr);
+                            
+                            if (isResting) {
+                                // 检查工作 streak 是否超过7天
+                                if (workStreak.length > 7) {
+                                    // 找到 streak 的中间位置，安排休息
+                                    const middleIndex = Math.floor(workStreak.length / 2);
+                                    const restDay = workStreak[middleIndex];
+                                    const restDateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(restDay).padStart(2, '0');
+                                    
+                                    // 安排休息
+                                    empSchedule.autoRestDays.push(restDateStr);
+                                    dailyRestCount[restDateStr]++;
+                                    restDaysPerEmployee[name]++;
+                                    
+                                    // 更新组和性别休息统计
+                                    const group = employeeGroups[name] || '无组别';
+                                    if (!dailyGroupRest[restDateStr][group]) {
+                                        dailyGroupRest[restDateStr][group] = 0;
+                                    }
+                                    dailyGroupRest[restDateStr][group]++;
+                                    
+                                    if (femaleEmployees.includes(name)) {
+                                        dailyFemaleRest[restDateStr]++;
+                                    }
+                                }
+                                
+                                // 重置 streak
+                                consecutiveWorkDays = 0;
+                                workStreak = [];
+                            } else {
+                                consecutiveWorkDays++;
+                                workStreak.push(day);
+                            }
+                        }
+                        
+                        // 检查最后一个 streak
+                        if (workStreak.length > 7) {
+                            const middleIndex = Math.floor(workStreak.length / 2);
+                            const restDay = workStreak[middleIndex];
+                            const restDateStr = currentYear + '-' + String(currentMonth).padStart(2, '0') + '-' + String(restDay).padStart(2, '0');
+                            
+                            empSchedule.autoRestDays.push(restDateStr);
+                            dailyRestCount[restDateStr]++;
+                            restDaysPerEmployee[name]++;
+                            
+                            const group = employeeGroups[name] || '无组别';
+                            if (!dailyGroupRest[restDateStr][group]) {
+                                dailyGroupRest[restDateStr][group] = 0;
+                            }
+                            dailyGroupRest[restDateStr][group]++;
+                            
+                            if (femaleEmployees.includes(name)) {
+                                dailyFemaleRest[restDateStr]++;
+                            }
+                        }
+                    });
+                }
+                
+                // 执行调整
+                adjustConsecutiveWorkDays();
+                
+                // 重新验证
+                const adjustedValidation = validateConsecutiveWorkDays();
+                if (adjustedValidation.allValid) {
+                    console.log('排班表已自动调整，连续上班天数已控制在7天以内');
+                } else {
+                    console.warn('调整后仍存在问题:', adjustedValidation.issues);
+                }
+            }
+            
             currentSchedule = {
                 employeeSchedule: employeeSchedule,
                 dailyRestCount: dailyRestCount,
@@ -1870,11 +2115,15 @@
             };
             scheduleLoaded = true;
             
+            console.log('准备设置容器内容...');
+            console.log('容器元素:', document.getElementById('scheduleContainer'));
             container.innerHTML = html;
+            console.log('容器内容设置完成');
             addClickHandlers();
             
             localStorage.setItem(key, JSON.stringify(currentSchedule));
             console.log('排班表生成完成！');
+            console.log('最终生成的HTML:', html);
         }
         
         function getScheduleKey() {
@@ -1906,6 +2155,42 @@
             const { employeeSchedule, dailyRestCount, dailyOnDuty, daysInMonth } = currentSchedule;
             
             let html = `
+                <table class="header-table">
+                    <tr>
+                        <td colspan="4" style="text-align: center; font-size: 24px; font-weight: bold;">📋 排班表生成</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="controls">
+                                <div class="control-row">
+                                    <div class="control-item">
+                                        <div class="month-selector">
+                                            <label>选择月份：</label>
+                                            <select id="yearSelect" onchange="onMonthChange()">
+                                            </select>
+                                            <select id="monthSelect" onchange="onMonthChange()">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="rest-days-info">
+                                            <label>⚠️ 本月应休天数设置：</label>
+                                            <span class="rest-days-value" id="totalRestDaysDisplay">${totalRestDays}</span>
+                                            <label>天</label>
+                                        </div>
+                                    </div>
+                                    <div class="control-item">
+                                        <div class="btn-group">
+                                        <button class="btn btn-primary" onclick="generateSchedule()">⚡ 一键生成排班表</button>
+                                        <button class="btn btn-info" onclick="exportExcel()">📄 导出表格</button>
+                                        <button class="btn btn-success" onclick="confirmSchedule()">✅ 确定排班</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
                 <table class="fixed-table">
                     <thead>
                         <tr>
